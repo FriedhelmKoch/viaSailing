@@ -1,0 +1,398 @@
+//
+// viaLinked Project
+// The following copyright notice may not be removed under any circumstances. 
+//
+//  http://viaCredit.viaLinked.com 
+//  Copyright (c) 2014 viaLinked (friedhelm at vialinked.com)
+//  Not under Open Source License!
+//
+// 	http://www.viaLinked.com/#license_page.html
+//
+// ---------------------------------------------------
+//  Language Modul: de-DE - generic Deutsch
+//  ACHTUNG: muss im UTF-8 Format gespeichert werden! 
+// ---------------------------------------------------
+//
+// Section - Automated Updated IDs:
+// Individual Updated IDs marked with '#':
+//
+// ---------- buttons ----------
+menuBtn						Menü
+backBtn						Zurück
+editBtn						Edit
+saveBtn						Save
+infoBtn						Info
+mailBtn						Email
+serviceBtn				Service
+homeButton				viaCredit
+weiterBtn					Weiter
+exitBtn						Abbruch
+calculatorBtn			Calc
+einkaufBtn				Ich schau mal rein
+impressumBtn			Impressum	
+optionsBtn				Optionen		
+optChangeBtn			Übernehmen
+calcBtn						Berechnen
+deleteItems				Löschen
+storeBtn					Speichern
+delBtn						Löschen
+legendeBtn				Legende
+mailFeedbackBtn		Email an uns
+mailRecommendBtn	App weiterempfehlen
+jaLbl							Ja
+neinLbl						Nein
+#wheelSetBtn			Übernehmen
+#wheelCancelBtn		X
+#columnBtn				Spalten...
+// ---------- icons ----------
+targetStr					Kreditsumme
+kursStr						Kurs/Preis
+renditeStr				Effektivrendite
+rateStr						Rate
+annuStr						Annuität
+annuPStr					Prozentannuität
+termYear					jährliche Zahlungsweise
+termHalf					halbjährliche Zahlungsweise
+termQuarter				quartals Zahlungsweise
+termMonth					monatliche Zahlungsweise
+ausgleichStart		Ausgleichszahlung am Anfang
+ausgleichEnd			Ausgleichszahlung am Ende
+constRate					konstante Rate pro Jahr
+constAnnuitaet		konstante Annuität pro Jahr
+constAnnuitaetP		Prozentannuität pro Jahr
+Marktzins					Marktzinsen
+Interests					Nominalzinsen
+EffInterests			Effektivzinssatz
+Tilgung						Tilgungszinsen (ggf. zum Start)
+LaufzeitJ					Tilgungsdauer [Jahre]
+LaufzeitM					Tilgungsdauer [Monate]
+RestlaufzeitJ			Restaufzeit [Jahre]
+RestlaufzeitM			Restaufzeit [Monate]
+Agio							Agio
+Disgio						Disagio
+Sondertilgung			Sonderzahlung am Jahresende
+Tilgungsfrei			Tilgungsfreie Zeit [Jahre]
+invoiceStr				Rechnungsbetrag
+earningsStr				Finanzierungsgewinn
+zinsLKStr					Effektivzins Lieferantenkredit
+duedateStr				Zahlungsziel [Tage]
+discountperiodStr	Skontofrist [Tage]
+skontoStr					Skonto [%]
+// ---------- beispiele ----------
+#Example_1				Darlehen - Auto BMW 320
+#Example_2				Hypothek - Apartment
+#Example_3				Wert - Grundstück
+#Example_4				Übernahme - Mobile Vertrag
+#Example_5				Handwerker - Skonto
+#Example_6				Leasing - Audi A5	
+// ---------- error messages ----------
+errorText001			<h4>Du bist nicht angemeldet:</h4><br/>Um Optionen für Deine persönlichen Einstellungen vornehmen zu können, mußt Du dich bei viaLinked registriert und mit Deiner User-Email und Passwort angemeldet haben!
+UID-ErrHeader			FEHLER
+UID-ErrText				Du hast derzeit keine Nutzungs-Berechtigung! Du must registriert und angemeldet sein um die App zu nutzen!
+AJAX-ErrHeader		Übertragungsfehler
+AJAX-ErrText			<b>ACHTUNG:</b> Die Daten konnten nicht übertragen werden! Die Fehlerursache ist:
+#evalError				< 0 %<br/>(Preis zu hoch oder Restlaufzeit zu kurz)
+#wheelError				Bitte ausfüllen...
+#freeError				Tilgungsfreie Zeit < Tilgungsdauer
+#zahlungError			Sonderzahlung < Annuität
+#zahlungPAError		Sonderzahlung < Kreditsumme
+#zahlungLSError		Sonderzahlung < Anschaffungsbetrag
+#restError				(Restschuld + Anzahlung) < Investition
+#sonderError			(Anzahlung + Restschuld) < Investition
+// ---------- success messages ----------
+ModiSuccHeader		Änderungen	
+ModiSuccText			Änderungen erfolgreich übernommen!
+// ---------- index.html ----------
+headerIndex				Dashboard
+archivTilgung			Meine Tilgungspläne
+archivBewertung		Meine Bewertungen
+legende						Legende:
+delpopMessage			Der Eintrag wird unwiderruflich gelöscht!
+delpopHeader			Eintrag löschen?
+legpopHeader			Legende:
+// ---------- Panel Menu ----------
+menuPanel00				Dashboard
+menuPanel01				Kredite
+menuPanel02				Hypotheken
+menuPanel03				Kurs einer Schuld
+menuPanel04				Effektivrendite
+menuPanel05				Info
+menuPanel06				Optionen
+menuPanel07				Impressum
+menuPanel08				Lieferantenkredit
+menuPanel09				Leasing
+menuDivider00			Menü
+menuDivider01			Darlehen
+menuDivider02			Bewertung
+menuDivider03			Einstellungen
+// ---------- Tilgung ----------
+headerST					Tilgung
+targetLabelST			Kreditsumme
+regHeaderDiv			Kreditrahmen
+interestsLblST		nominaler Zinssatz [%]:
+cycleLabelST			Tilgungsdauer [Jahre]:
+tilgungLabel			Tilgung mit konstanter:
+rateLbl						Rate
+annuitaetLbl 			Annuität
+detailLbl					Details
+menuRate00				Sondertilgungsformen:
+tilgungTerm				Zahlungsweise | Detailierter Report:
+tilgungFree				Tilgungsfreie Zeit [Zahlungsperiode]:
+tilgungSonder			Sonderzahlung [am Jahresende]:
+tilgungAgio				Agio pro Zahlungsperiode [%]:
+creditFreeLbl			Til.frei
+creditSonderLbl		So.zahl
+creditDatumLeg		Darstellung des Tilgungsplans mit:
+tilgungDatum			Fälligkeit der ersten Rückzahlung:
+DatumLblJa				Datum
+DatumLblNein			lfd. Nummer
+// ---------- Prozentannuitaet ----------
+headerAnnuPA			Prozentannuität
+targetLblPA				Kreditsumme
+interestsLbl			nominaler Zinssatz [%]:
+repaymentLblPA		anfänglicher Tilgungssatz [%]:
+ausgleichLabel		Ausgleichszahlung am:
+ausgleichALbl			Anfang
+ausgleichELbl			Ende
+// ---------- Kurs einer Schuld ----------
+headerKR					Kurs/Preis
+targetLabelKR			Kreditsumme
+cycleLabelKR			Gesamtlaufzeit [Jahre]:
+cycleRestLblKR		Restlaufzeit [Monate]:
+interestsLblKR		nominaler Zinssatz [%]:
+marketLblKR				Marktzinssatz [%]:
+// ---------- Effektivrendite ----------
+headerER					Rendite
+targetLabelER			Kreditsumme
+marketLabelER			Preis
+cycleLabelER			Gesamtlaufzeit [Jahre]:
+cycleRestLblER		Restlaufzeit [Monate]:
+interestsLblER		nominaler Zinssatz [%]:
+// ---------- Leasing ----------
+headerLeasLS			Leasing
+regHeaderLeas			Leasingbedingungen
+leasTargetLbl			Investition
+leasInterestLbl		Zinssatz [%]:
+leasCycleLbl			Laufzeit [Jahre]
+leasTermLbl				Zahlungsweise:
+leasOptionLbl			Optionen:
+leasAnzahlungLbl	Anzahlung
+leasKaufLbl				Restwert
+leasExtLbl				Verläng...
+leasSonderLbl			Sonder-/Anzahlung
+leasRestLbl				Restwert
+leasCycleExtLbl		Laufzeitverlängerung [Jahre]:
+leasExtRentLbl		Verlängerungsmiete	
+leasAnnuStr				Leasingannuität
+// ---------- Lieferantenkredit ----------
+headerLK					Lieferantenkredit
+regHeaderLK				Rechnungsrahmen
+invoiceLabelLK		Rechnungsbetrag
+duedateLabelLK		Zahlungsziel [Tage]
+vatLabelLK				Mehrwertsteuer [%]
+rebateLabelLK			Rabatt [%]
+marketLabelLK			Kontokorrentzins [%]
+cashdiscountLblLK	Skonto [%]
+discountPLblLK		Skontofrist [Tage]
+mwstFrageLbl			MwSt in Rechnungsbetrag enthalten:
+// ---------- Ergebnispage ----------
+ergTitel					Tilgungsplan
+ergHeaderDiv			Kreditrahmen
+ergTableDiv				Tilgungsplan
+// Section - Individual Updated IDs marked with '#':
+#ergProStr				pro
+#ergHeaderAStr		<b>Tilgung mit konstanter Annuität</b>
+#ergHeaderRStr		<b>Tilgung mit konstanter Rate</b>
+#ergDarlehenStr		Darlehen:
+#ergSchuldStr			Schulden:
+#ergZSatznStr			Nominalzins:
+#ergEffSatznStr		Effektivzinssatz (IRR/AIBD):
+#ergTSatzStr			Tilgungssatz:
+#ergTDauerStr			Tilgungsdauer:
+#ergAnnuStr				Annuität:
+#ergRateStr				Rate:
+#ergimJahrStr			im Jahr:
+#ergimMonatStr		im Monat:
+#ergBEvenStr			Break-Even nach:
+#ergnachEndeStr		Am Ende von
+#ergZinsenStr			Zinsen:
+#ergTilgungStr		Tilgung:
+#ergTProzentStr		T-%:
+#ergZProzentStr		Z-%:
+#ergAnnuStr				Annuität:
+#ergPeriodStr			Periode Zahlungsweise
+#ergJahrStr				Jahr
+#ergQuarterStr		Quartal
+#ergHalfYearStr		Halbjahr
+#ergMonthStr			Monat
+#ergJahreStr			Jahre
+#ergQuartersStr		Quartale
+#ergHalfYearsStr	Halbjahre
+#ergMonthsStr			Monate
+#ergJahrenStr			Jahren
+#ergJAHRENStr			JAHREN
+#ergAnfangStr			(Anfangstilgungssatz)
+#ergSubtotalStr		ZWISCHENSUMME NACH
+#ergTotalStr			ABSCHLUSS NACH
+#ergAnnuAbStr			Annuität ab dem:
+#ergRateAbStr			Rate ab dem:
+#ergTFreeStr			Tilgungsfreie Zeiten:
+#ergAgioStr				Agio:
+#ergDisagioStr		Disagio:
+#ergAuszahlungStr	Auszahlung:
+#ergSonderStr			Sonderzahlung:
+#ergAusglStr			Ausgleich
+#ergStartStr			Anfang:
+#ergEndeStr				Ende:
+#ergDatumStr			Datum:
+// ---------- Bewertungpage ----------
+bewTitel					Bewertung
+bewHeaderDiv			Bewertung eines Kredits
+#mailBewHeader		BEWERTUNG EINES KREDITS
+#bewHeaderAStr		<b>für eine Annuitätenschuld</b>
+#bewHeaderRStr		<b>für eine Ratenschuld</b>
+#bewLaufzeitStr		Laufzeit:
+#bewMarktStr			Marktzins:
+#bewRemainPStr		Restlaufzeit:
+#bewKursStr				Kurs der Schuld:
+#bewTakeoverStr		übernommen
+#bewRenditeStr		Effektivrendite:
+#bewimJahrStr			Im Jahr:
+// ---------- DisplayLeasing ----------
+#leasHeader				<b>für eine Leasingannuität</b>
+#leasAnschaffung	Investition:
+#leasLaufzeitExt	Laufzeitverlängerung
+#leasExtRent			Verlängerungsmiete:
+#leasLaufzeitStr	Leasinglaufzeit:
+#leasSonderStr		Sonder-/Anzahlung:
+#leasRestStr			Restwert:
+#leasOptStr				Leasing Optionen:
+#leasPeriodStr		Zahlungsperioden
+#leasAnnuHeadStr	Leasing Annuität:
+#leasExtRateStr		Bei Verlängerung
+#vonZahlung				Zahlung von:
+#bisZahlung				bis:
+// ---------- DisplayLieferantenkredit ----------
+#skontoHeader			<b>für einen Lieferantenkredit</b>
+#BetragStr				Investition:
+#ZielStr					Zahlungsziel:
+#ZahlungStr				Zahlungsbetrag:
+#VatStr						MwSt:
+#RabattStr				Rabatt:
+#MarktzinsStr			Kontokorrentzins:
+#SkontoStr				Skonto:
+#SkontofristStr		Skontofrist:
+#NettoStr					Netto
+#BruttoStr				Brutto
+#FinanzgewinnStr	Finanzierungsgewinn:
+#skontoTageStr		Tage
+#ZeitraumLKStr		Zeiträume für Lieferantenkredit:
+#kostenlosStr			kostenlos:
+#kostenpflichtStr	kostenpflichtig:
+#ZinssatzLKStr		Zinssatz für Lieferantenkredit:
+#tradecreditJa		Empfehlung: <b>Lieferantenkredit wahrnehmen!</b>
+#tradecreditNein	Zinssatz für Lieferantenkredit zu hoch. Empfehlung: <b>Skontonutzung, ggf. über Kontokorrentkonto wahrnehmen!</b>
+// ---------- Popups ----------
+popSaveFrame			Sichern
+popSaveHeader			Name:
+saveMsgSuccess		Erfolgreich gespeichert!
+popOptions				Optionen erfolgreich übernommen!
+popRestwertError	<b>ACHTUNG:</b><br/>Der 'Restwert' plus die 'Anzahlung' einer Anschaffung darf nicht gleich oder größer sein als der Anschaffungswert!<p><b>Bitte ändern:</b><br/>Entweder die 'Anzahlung' und/oder den 'Restwert' reduzieren.</p>	
+popAnzahlungError	<b>ACHTUNG:</b><br/>Die 'Sonder-/Anzahlungzahlung' plus der 'Restwert' darf nicht gleich oder größer sein als der Anschaffungswert!
+popTilgungError		<b>ACHTUNG:</b><br/>Die 'Tilgungsfreie Zeit' pro Zahlungsperiode (monatl., viertel-, halb- oder ganzjährlich) darf nicht gleich oder größer sein als die Tilgungsdauer!<p>Beispiel: Bei vierteljährlicher Zahlungsweise gibt es also 4 Zahlungen pro Jahr. Demnach wäre hierfür die 'Tilgungsfreie Zeit' für ein ganzen Jahr 4.</p><p><b>Bitte ändern:</b><br/>Den Zeitraum der Periode der 'Tilgungsfreien Zeit' reduzieren.</p>
+popSonderError		<b>ACHTUNG:</b><br/>Die Sonderzahlung am Jahresende kann nicht gleich oder größer sein als die Annuität in der entsprechenden Zahlungsperiode!<p><b>Bitte ändern:</b><br/>Die Höhe der 'Sonderzahlung' am Jahresende reduzieren.</p>
+popSonderPAError	<b>ACHTUNG:</b><br/>Die Sonderzahlung am Jahresende kann nicht gleich oder größer sein als die Kreditsumme!<p><b>Bitte ändern:</b><br/>Die Höhe der 'Sonderzahlung' am Jahresende reduzieren.</p>
+// ---------- Mail ----------
+#mailRegHead1			KREDITRAHMEN
+#mailRegHead2			TILGUNGSPLAN
+#mailRegHead3			KREDITVERLAUF <span style="font-size:0.7em;">[in Tausend ('000)]</span>
+#mailBewSubject		viaCredit - Kreditbewertung
+#mailErgSubject		viaCredit - Tilgungsplan
+#mailFeedbackSub	viaCredit - Feedback
+#mailRecommendSub	Die App viaCredit solltest Du installieren
+#mailCompliment		<b>Was gefällt mir besonders gut:</b></br>
+#mailImprovement	<b>Verbesserungsmöglichkeiten:</b><br/>
+#mailContact			<b>Nehmen Sie mit mir Kontakt auf:</b></br>- Vor-, Nachname: </br>- Email: </br>- Telefon: </br></br>Mein Anliegen: </br>  
+#mailRecommendStr	<b>Diese App ist interessant!</b></br>Ich habe eine tolle App entdeckt, die Du Dir einmal ansehen solltest. Sie berechnet Kredite jeglicher Art und bringt Dir Klarheit für den gesamten Zahlungszeitraum. </br>Schau sie Dir einmal an. Klick einfach hier auf den AppStore Button. Dieser führt Dich direkt dorthin:</br>
+#mailRecommendLnk	<a href="https://itunes.apple.com/de/app/viacredit/id648996614?l=de&ls=1&mt=8"><img src="http://viacredit.vialinked.com/img/Available_on_the_App_Store_Badge_DE_135x40.png" width="135" border="0" alt="AppStore"></a>	
+#mailRegards			Beste Grüße
+// ---------- Options ----------
+headerOptions			Optionen
+currencyHeader		Währung
+currencyText			Welches Währungssymbol soll angezeigt werden?
+currencyLabel			Währung:
+languageHeader		Sprache
+languageText			Welche Sprache soll verwendet werden?
+languageLabel			Sprache:	
+numbersHeader			Zahlen Darstellung
+numbersText				Welche Zahlennotation soll verwendet werden?
+visualHeader			Farben
+visualText				Wie soll die Farbdarstellung sein?
+dividerHeader			Tilgungsplan
+dividerText				Zwischensumme nach wieviel Jahren?
+langUS						Englisch (en-US)
+langDE						Deutsch (de-DE)
+langES						Spanisch (es-ES)
+// ---------- Chart ----------
+chartDiv					Kreditverlauf <span style="font-size:0.7em;">[in Tausend ('000)]</span>
+// ---------- info ----------
+headerInfo				Info
+iText000000				<h3>Allgemeines zu Kreditverträgen</h3>
+iText000001				Kreditverträge werden, was die Zahlungen des Schuldners angeht, in den unterschiedlichsten Spielarten abgeschlossen. viaCredit gibt Ihnen u.a. Antworten auf folgende Fragen:<ul style="list-style-type:square;padding-left:1.4em;margin-top:0.2em;"><li>Wie hoch ist der Zahlungsstrom für eine bestimmte Kreditsumme?</li><li>Bietet mir eine Raten- oder Annuitätische Tilgung Vorteile?</li><li>Wie sehen komplette Tilgungspläne für Kredite und Hypotheken aus?</li><li>Wie hoch ist der Effektivzins nach IRR/AIBD</li><li>Ist ein Lieferantenkredit / Skontoabzug sinnvoll in Anspruch zu nehmen?</li><li>Zu welchem Preis kann ich einen laufenden Kredit abkaufen?</li><li>Welche Rendite ergibt ein Kredit bei einem bestimmten Preis?</li></ul>   
+iText000002				<b>Zahlungsweise</b><br/>viaCredit geht davon aus, dass Rückzahlungen und Zinsen nachschüssig geleistet werden. Die Zahlungen, die der Schuldner an den Gläubiger leistet, nennt man Annuitäten. Annuitäten können sich aus mehreren Teilbeträgen: ≫Zins-, Tilgungsbetrag, Agio, Prämien, Gebühren≪ zusammensetzen.
+iText000011				<b>Schuldner</b><br/>Der ≫Schuldner (Käufer/Debitor)≪ ist verpflichtet dem Gläubiger eine bestimmte Forderung (z.B. Geldbetrag) zu erbringen. Die Fälligkeit der Forderung regelt eine Vereinbarung. 
+iText000021				<b>Gläubiger</b><br/>Ein ≫Gläubiger (Verkäufer/Kreditor)≪ kann von einem Schuldner eine bestimmte Forderung verlangen. Er glaubt dem Schuldner, dass dieser diese Forderung begleichen kann.
+iText000031				<b>Zinssatz</b><br/>Als Zinssatz wird der in Prozent ausgedrückte Betrag für eine geliehende Schuld ausgedrückt. 
+iText001000				<h3>Dashboard</h3>
+iText001001				Im Dashboard werden alle gespeicherten Tilgungspläne und Bewertungen aufgeführt. Ein Touch/Klick auf die Auswahl führt auf den entsprechenden Tilgungsplan. Dieser läßt sich dann ändern und ggf. neu speichern.<br clear=all>
+iText001002				<img src="./img/viaCredit-button.png" width="130" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:0px">Der Button ≫viaCredit≪ führt immer zum Menü von welchem alle Module von viaCredit ausgewählt werden können.<br clear=all>
+iText002000				<h3>Kredite</h3>
+iText002001				<b>Tilgung von Krediten</b><br/>Sie benötigen ein Darlehen für eine Anschaffung: ≫Auto oder Immobilien-Hypothek≪ zu finanzieren. Die Bedingungen eines Darlehens orientieren sich an dem vereinbarten Zinssatz ≫Nominalzinssatz≪ und der Tilgungsdauer.	Beglichen werden Darlehen prinzipiell entweder über eine ≫Raten- oder Annuitätentilgung≪. Zusätzlich besteht die Möglichkeit Sondervereinbarungen wie eine ≫Tilgungsstreckung, Agio oder Disagio≪ festzulegen.
+iText002003				<b>Annuität im Allgemeinen</b><br/>Die ≫Annuität≪ ist die von ≫Zinssatz≪ und ≫Kreditlaufzeit≪ abhängige Höhe der zu leistenden Zahlung am Ende der Zahlungsperiode. Annuitäten bestehen aus einem Zins- und einem Tilgungsanteil.
+iText002004				<b>Tilgung mit konstanter Rate</b><br/><img src="./img/rate.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:7px"><br/>Die Tilgung über eine konstante Rate oder Annuität hat Auswirkungen auf den Zahlungsstrom am Ende der Tilgungsperiode. Bei der annuitätischen Tilgung ist die Annutät immer konstant, während bei Ratentilgung die Annuität im Laufe der Kreditlaufzeit stetig abnimmt.  
+iText003001				Kennzeichen der ≫Ratentilgung≪ sind Tilgungsraten in ≫gleichbleibender≪ Höhe. Zum Tilgungsanteil kommen die Zinsen hinzu und bilden gemeinsam die Annuität. Mit der Laufzeit verringern sich die Zinsen und damit auch die Annuität.<br clear=all>
+iText002011				<b>Agio / Aufgeld</b><br/>Anders als für Standard Darlehen ist das Agio für Fondsanleger sehr wichtig, denn Fondsanteile werden regelmäßig mit einem Aufschlag gehandelt. Um einen Fonds zu kaufen, der eine bestimmte Summe wert ist, muss der Käufer also mehr zahlen, als er letztlich bekommt.
+iText002021				<b>Disagio (auch Damnum) / Abgeld</b><br/>Um einen niedrigeren Nominalzins zu verhandeln, wird desöfteren ein ≫Disagio≪ vereinbart. Das Disagio stellt einer Art ≫vorausbezahlter Zins≪ dar und fließt in die Betrachtung des ≫Effektivzinssatzes≪ ein. Der Vorteil eines Disagio kann eine steuerliche Abschreibung sein, die über die gesamte Kreditlaufzeit der Verbindlichkeit verteilt werden kann. Bei einem Fälligkeitsdarlehen wäre eine lineare und bei einer Raten-, Annuitäten-Tilgung eine progressive Abschreibung sinnvoll. Dieses Disagio reduziert zwar die ausgezahlte Kreditsumme, muss jedoch komplett verzinst und getilgt werden. Daher hat das Disagio keine Auswirkungen auf die Zahlungen des Tilgungsplans. 
+iText002031				<b>Fälligkeitsdarlehen</b><br/>Beim ≫Fälligkeitsdarlehen≪ (keine Tilgungszahlungen) wird die Kreditsumme während einem Teil oder der ganzen Laufzeit nicht getilgt.	Am Ende der tilgungsfreien Zeit muss dann die Kreditsumme für die Restlaufzeit, oder wenn über die gesamtes Laufzeit vereinbart wurde, vollständig zurückgezahlt werden. Für Schuldner macht dieses Darlehen dann wirklich Sinn, wenn diese endfällige, einmalig hohe Kreditsumme entweder per Kapitallebensversicherungen oder Bausparverträge beglichen werden kann. 
+iText002041				<b>Effektivzinssatz</b><br/>viaCredit berechnet den Effektivzinssatz nach der Methode AIBD (Association of International Bond Dealers), organisiert durch die ISMA (International Securities Market Association). Mit Hilfe des Effektivzinssatzes können nun Darlehensangebote mit gleicher Zinsfestschreibungsdauer verglichen werden.
+iText002002				<b>Bearbeitungsgebühren</b><br/>Banken berechnen ihren Kunden für den Abschluss von Krediten häufig ≫Bearbeitungsgebühren≪. Die Vereinbarung über die Rückzahlung der Gebühren kann sehr unterschiedlich sein. Die Gebühren fliessen in die Berechnung des Effektivzinssatzes mit ein. viaCredit berechnet für den Effektivzins die Gebühren verteilt über die gesamte Laufzeit. Die Gebühren müssen jedoch zur Verfügungstellung der Kreditsumme gezahlt werden. 
+iText003021				<b>Annuität</b><br/>Die Annuität ist bei der Ratentilgung nicht konstant und verringert sich mit zunehmender Laufzeit.<br clear=all>
+iText004001				<b>Tilgung mit konstanter Annuität</b><br/>Der Sinn der Annuitätentilgung ist, Zahlungen gleichmäßig auf die Nutzungsjahre eines Investitionsobjektes zu verteilen. Die Annuitätentilgung findet nahezu überall Anwendung, ist jedoch überwiegend in der Immobilienfinanzierung zu finden (siehe auch Prozentannuität). Das herkömmliche Baugeld von Banken, oder auch das Baugeld von Versicherungen, wird in aller Regel als Annuitätentilgung gestaltet.
+iText004002				<img src="./img/annuitaet.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:7px"><br/><b>Vorteil</b><br/>Für den Schuldner stellt die Annuitätentilgung eine solide und konsequente Kalkulationsgrundlage dar. Zum Beispiel gegenüber einer Bank stellt sie mit einem monatlich gleichbleibenden Zahlungsstrom eine übersichtliche und einfach strukturierte Verbindlichkeit dar.
+iText004011				<b>Annuität</b><br/>Die Annuität ist bei der Annuitätentilgung ein über die Laufzeit gleichbleibender Betrag (siehe auch Abbildung), der sich aus einem verringenden Zins- und einem steigenden Tilgungsanteil zusammensetzt. Eine anfänglich höhere Zinszahlung wird in der Laufzeit bis zu einem Break-Even-Point (Abbildung: ab dem 4. Jahr) von der Tilgungszahlung überholt.<br clear=all>
+iText005000				<h3>Hypotheken</h3>
+iText005001				Eine spezielle Form der Annuitätentilgung ist das Hypothekendarlehen, auch ≫Prozentannuität≪ genannt, bei der die Annuität als Prozentsatz der Ursprungsschuld berechnet wird. Kennzeichnend für diese Prozentanuitätentilgung ist, dass es keine ganzzahligen Laufzeiten gibt. Ein Beispiel hierfür ist ein Hypothekendarlehen für eine Immobilienfinanzierung.
+iText005002				Da die Tilgungsraten Jahr für Jahr wachsen, kann nur für das erste Jahr ein Tilgungssatz vereinbart werden, der dann während der Laufzeit ansteigt, bei gleichzeitiger Reduzierung der Zinsen.   
+iText005011				<b>Ausgleichzahlungen</b><br/>Da es keine ganzzahligen Laufzeiten gibt, kann diese Restzahlung (≫Ausgleichszahlung≪) entweder am Anfang oder Ende der gesamten Laufzeit beglichen werden.
+iText006000				<h3>Kurs einer Schuld</h3>
+iText006001				Eine Bewertung künftiger Zahlungsansprüche erfolgt immer unter der Voraussetzung sicherer Zukunftserwartungen, beziehungsweise Zahlungsfähigkeit und -willigkeit des Schuldners. Unter dem ≫Kurs einer Schuld≪ versteht man den Preis, den jemand bezahlen muss oder bezahlen soll, der Ansprüche auf die künftigen ( Zins- und Tilgungs-) Zahlungen erwerben will. Ein Anleger der Ansprüche auf einen Kredit erwerben will hat grundsätzlich zwei Möglichkeiten. Entweder er steigt in den laufenden Kreditvertrag ein und zahlt den Preis, oder er legt am Kapitalmarkt einen Betrag in Höhe des Barwertes zu dem entsprechenden Zinssatz an. Beide Alternativen versprechen die gleiche ≫Ernte≪. 
+iText006002				<b>Gewinnmaxime</b><br/>Ein Anleger wird also versuchen sein Geld so anzulegen, dass möglichst der ≫Kurs einer Schuld≪ kleiner ist als der Barwert einer alternativen Geldanlage mit gleichen Zinssätzen. 
+iText007000				<h3>Effektivrendite</h3>
+iText007001				≫Effektivrendite≪ nennt man jenen Zinssatz, bei dem der Barwert der Zahlungsansprüche dem ≫Kurs der Schuld≪ gleicht.
+iText007002				<img src="./img/rendite-performance.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:7px"><br/>Eine Zahlungsreihe hat also zu einem bestimmten Datum nur einen Kurs oder Preis. Unter der Voraussetzung einer jährlichen nachschüssigen Zahlungreihe steigen die Zahlungen (Zinsen und Tilgung) bis zum Jahresende an (siehe Abbildung). Somit steigt die Effektivrendite ebenfalls in der Jahresperiode, bis zur Zahlung der Annuität am Jahresende, an. Die Schuld des Kredits ist danach um diesen nachschüssigen Betrag geringer, weswegen die Effektivrendite schlagartig fällt. 
+iText007003				<b>Gewinnmaxime</b><br/>Die Effektivrendite eine Kredits sollte zumindest gleich oder höher sein als der Nominalzinssatz unter dem der Kredit abgechlossen wurde. Somit gibt es nur eine begrenzte Periode zu der es sich lohnt bei einem festgelegten Preis diesen Kredit zu übernehmen oder abzulösen. (Abbildung: bei einer Kreditsumme von 1.000 EUR, Nominalzins: 6%, Laufzeit: 5 Jahre und Preis von: 900 EUR ist die Ablöseperiode nur in den ersten 11 Monaten wirtschaftlich. Bei noch 38 Monaten Restlaufzeit fällt der Effektivzins dann sogar unter 0%).<br clear=all> 
+iText008000				<h3>Optionen</h3>
+iText008001				Für die Darstellungen der Werte im Tilgungsplan lassen sich das Währungskurzzeichen (z.B. EUR, US$, etc.), die Sprache für die App, die Zahlennotation (z.B. 1.234,00 für die englische Notation, als auch die deutsche und französiche Notation)für die Darstellung der Zahlenwerte festlegen. Auch lassen sich die jährlichen Abstände der Zwischensummen im Tilgungsplan einstellen.
+iText010000				<h3>Service</h3>
+iText010001				<b>Infos & Ideen</b><br/>Geben Sie uns weitere Ideen und ihre Meinung zu der App. Wir wollen uns verbessern und die App noch weiter ihren Ansprüchen anpassen.
+iText010002				<b>Empfehlen Sie uns weiter</b><br/>Wir freuen uns, wenn Sie viaCredit an Freunde, Bekannte oder Geschäftskollegen weiterempfehlen.
+iText009000				<h3>Lieferantenkredit</h3>
+iText009001				<b>Was ist ein Lieferantenkredit?</b><br/>Wenn der Lieferant dem Kunden ein Zahlungsziel ohne Abzüge gewährt, wird von einem ≫Lieferantenkredit≪ gesprochen. Hierbei erhält der Kunde die Möglichkeit die Rechnung innerhalb eines bestimmten Zeitraumes ohne zusätzliche Kosten zu zahlen (Bsp.: Zahlung der Rechnung innerhalb von 30 Tagen). Wenn der Lieferant dem Kunden neben diesem Kredit auch ≫Skontoabzug≪ gewährt (Bsp.: Bei Zahlung der Rechnung innerhalb 7 Tagen, Skonto von: 2%), wird nur der Zeitraum zwischen Ablauf des Skontozahlungsziels und dem allgemeinen Zahlungsziel als Lieferantenkredit bezeichnet (Bsp.: 30 Tage Zahlungsziel minus 7 Tage Skontozeitraum => 23 Tage Lieferantenkredit).
+iText009002				<b>Empfehlung</b><br/>Das Nutzen eines Lieferantenkredites und der Verzicht auf die Nutzung des gewährten Skonto können bei dem Kunden zu einem hohen Zinsaufwand führen! Daher kann es für den Kunden von Vorteil sein, wenn er den Rechnungsbetrag ggf. unter Ausnutzung des gewährten Skonto mit dem Kontokorrentkredit seiner Bank bezahlt.
+iText011000				<h3>Leasing</h3>
+iText011001				<b>Das Prinzip</b><br/>≫Leasing≪ ist eine Finanzierungform, bei der das Leasingobjekt vom Leasinggeber erworben und dem Leasingnehmer (Kunden) gegen Zahlung eines vereinbarten Entgelts zur Nutzung überlassen wird. Beim Leasing wird ausschliesslich für die Nutzung einer Anschaffung, nicht für dessen Erwerb bezahlt. Leasing ist eine Form der ≫annuitätischen≪ Tilgung.
+iText011002				<b>Vor-/Nachteile</b><br/><ul style="list-style-type:square;padding-left:1.4em;margin-top:0.2em;"><li>Die Höhe der Leasingannuitäten werden über den Restwert bestimmt</li><li>Stabile Finanzierungszeit mit festen Leasing Annuitäten</li><li>Steuerliche Absetzbarkeit nur bei betrieblichen Investitionen</li><li>Keine Kapitalbindung und freie liquide Mittel für andere Investitionen</li></ul> 
+iText011003				<b>Restwert</b><br/>Der Restwert bestimmt zum größten Teil die Finanzierung. Ein überhoher Restwert führt zu einer niedrigeren Leasingannuität. Der Restwert des Leasingobjektes muss am Ende des Leasingvertrages erzielt werden. Ist dies nicht der Fall, muss der Kunde den finanziellen Ausgleich erstatten! 
+iText011004				<b>Verlängerungsmiete</b><br/>Die neu zu ermittelnde Verlängerungsmiete ist so zu bemessen, dass sich die Deckung des Wertverzehrs für den Leasinggegenstand auf der Grundlage des Buchwertes bezieht, bzw. den Wert entsprechend der Restnutzungsdauer einer steuerlichen Abschreibung ergibt. Dies führt in der Folgezeit zu erheblich niedrigeren Leasingannuitäten.
+// ---------- impressum ----------
+headerImprint			Impressum
+impText01					<b>viaCredit</b>
+impText02					Version: 0.9.8
+impText03					Copyright © 2014:</br>&nbsp;&nbsp;&nbsp;&nbsp;Friedhelm Koch,</br>&nbsp;&nbsp;&nbsp;&nbsp;Hanfweg 2, 85302 Gerolsbach, Germany</b>
+impText04					<b>Haftungsausschluss</b>
+impText05					Es kann keine Garantie dafür übernommen werden, dass Berechnungen dieses Services zu jeder Zeit vollständig, richtig und in letzter Aktualität dargestellt werden.
+impText06					<p>Vielen Dank für die spanische Übersetzung:</br>&nbsp;&nbsp;&nbsp;&nbsp;Fabian Osterloh</p>
+// ---------- others/Seiten übergreifend ----------
+copyright					Copyright © 2014 by viaCredit
+
+// EOF

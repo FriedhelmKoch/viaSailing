@@ -1,0 +1,397 @@
+//
+// viaCredit Project
+// The following copyright notice may not be removed under any circumstances. 
+//
+//  http://viaCredit.viaLinked.com 
+//  Copyright (c) 2013 viaLinked (friedhelm at vialinked.com)
+//  Not under Open Source License!
+//
+// 	http://www.viaLinked.com/#license_page.html
+//
+// ---------------------------------------------------
+//  Language Modul: en-US - US American English
+//  ACHTUNG: muss im UTF-8 Format gespeichert werden! 
+// ---------------------------------------------------
+//
+// Section - Automated Updated IDs:
+// Individual Updated IDs marked with '#':
+//
+// ---------- buttons ----------
+menuBtn						Menu
+backBtn						Back
+editBtn						Edit
+saveBtn						Save
+infoBtn						Info
+mailBtn						Email
+serviceBtn				Service
+homeBtn						viaCredit
+weiterBtn					Continue
+exitBtn						Cancel
+calculatorBtn			Calc
+einkaufBtn				Let me show
+impressumBtn			Imprint
+optionsBtn				Options			
+optChangeBtn			Accept
+calcBtn						Calculate
+deleteItems				Delete
+storeBtn					Store
+delBtn						Delete
+legendeBtn				Legend
+mailFeedbackBtn		Mail to us
+mailRecommendBtn	Recommend App
+jaLbl							Yes
+neinLbl						No
+#wheelSetBtn			Select
+#wheelCancelBtn		X
+#columnBtn				Columns...
+// ---------- icons ----------
+targetStr					Credit target
+kursStr						Price
+renditeStr				Effective return rate
+rateStr						Annual rate
+annuStr						Annuity
+annuPStr					Annuity-immediate
+termYear					yearly repayment
+termHalf					halfyearly payment
+termQuarter				quarterly repayment
+termMonth					monthly repayment
+ausgleichStart		Adjustments at start of period
+ausgleichEnd			Adjustments at end of period
+constRate					const. rate
+constAnnuitaet		const. annuity
+constAnnuitaetP		annuity-immediate
+Marktzins					Current Market Interests
+Interests					Interests
+EffInterests			Effectiv interests
+Tilgung						Repayment interests (at start)
+LaufzeitJ					Repayment period [years]
+LaufzeitM					Repayment period [month]
+RestlaufzeitJ			Remaining period [years]
+RestlaufzeitM			Remaining period [month]
+Agio							Agio
+Disgio						Disagio
+Sondertilgung			Special additional repayment
+Tilgungsfrei			Grace period [years]
+invoiceStr				Invoice amount
+earningsStr				Financing earnings
+zinsLKStr					Interest trade credit
+duedateStr				Due date [days]
+discountperiodStr	Cash discount period [days]
+skontoStr					Cash discount [%]
+// ---------- beispiele ----------
+#Example_1				Loan - car BMW 320
+#Example_2				Mortgage - apartment
+#Example_3				Value - land lot
+#Example_4				Buy out - mobile phone contract
+#Example_5				Decision - cash discount
+#Example_6				Leasing - Audi A5
+// ---------- error messages ----------
+errorText001			<h2>You are not logged in:</h2><br/>Um Optionen für Deine persönlichen Einstellungen vornehmen zu können, mußt Du dich bei viaLinked registriert und mit Deiner User-Email und Passwort angemeldet haben!
+UID-ErrHeader			ERROR
+UID-ErrText				You are presently not eligible for use! You have to be registered and authorized with login to use the App!
+AJAX-ErrHeader		Transfer Error
+AJAX-ErrText			<b>ATTENTION:</b> The datas are not transfered correctly! The possible reason is:
+#evalError				< 0 %<br/>(Price to high or remaining period to short)
+#wheelError				Please fill out...
+#freeError				Grace Period < Repayment period 
+#zahlungError			Additional repayment < Credit anuity
+#zahlungPAError		Additional repayment < Credit target
+#zahlungLSError		Additional repayment < Investment
+#restError				(Salvage + Prepayment) < Purchase value
+#sonderError			(Prepayment + Salvage) < Purchase value
+// ---------- success messages ----------
+ModiSuccHeader		Changes	
+ModiSuccText			Changes successfully!
+// ---------- index.html ----------
+headerIndex				Dashboard
+archivTilgung			My Repayments
+archivBewertung		My Assessments
+legende						Legend:
+delpopMessage			Irreversible deletion!
+delpopHeader			Delete Item?
+// ---------- Panel Menu ----------
+menuPanel00				Dashboard
+menuPanel01				Credits
+menuPanel02				Mortgage
+menuPanel03				Price of credit
+menuPanel04				Effective return
+menuPanel05				Info
+menuPanel06				Options
+menuPanel07				Imprint
+menuPanel08				Trade credit
+menuPanel09				Leasing
+menuDivider00			Menu
+menuDivider01			Credits
+menuDivider02			Evaluations
+menuDivider03			Preferences
+// ---------- Tilgung ----------
+headerST					Repayment
+targetLabelST			Credit target
+regHeaderDiv			Credit overview
+interestsLblST		Interest rate [%]:
+cycleLabelST			Repayment period [years]:
+tilgungLabel			Repayment with constant:
+rateLbl						Rate
+annuitaetLbl 			Annuity
+detailLbl					details
+menuRate00				Special repayments:
+tilgungTerm				Mode of payment | Detailed report:
+tilgungFree				Grace period [payment period]:
+tilgungSonder			Special additional repayment [at end of year]:
+tilgungAgio				Agio per payment period[%]:
+creditFreeLbl			Gr.prd
+creditSonderLbl		Sp.pay
+creditDatumLeg		Repayment report with:
+tilgungDatum			Date of first repayment:
+DatumLblJa				Date
+DatumLblNein			ser. Number
+// ---------- Prozentannuitaet ----------
+headerAnnuPA			Mortgage
+targetLblPA				Credit target
+interestsLblPA		Interests [%]:
+repaymentLblPA		Rate of repayment [%]:
+ausgleichLabel		Adjustment payment at:
+ausgleichALbl			Start
+ausgleichELbl			End
+// ---------- Kurs einer Schuld ----------
+headerKR					Price of debt
+targetLabelKR			Credit target
+cycleLabelKR			Repayment period[years]:
+cycleRestLblKR		Remaining period [month]:
+interestsLblKR		Interest rate [%]:
+marketLblKR				Current market interest rate [%]:
+// ---------- Effektivrendite ----------
+headerER					Performance
+targetLabelER			Credit target
+marketLabelER			Price
+cycleLabelER			Repayment period [years]:
+cycleRestLblER		Remaining period [month]:
+interestsLblER		Interest rate [%]:
+// ---------- Leasing ----------
+headerLeasLS			Leasing
+regHeaderLeas			Leasing conditions
+leasTargetLbl			Investment
+leasInterestLbl		Interest rate [%]:
+leasCycleLbl			Leasing period [years]:
+leasTermLbl				Mode of payment:
+leasOptionLbl			Options:
+leasAnzahlungLbl	Deposit
+leasKaufLbl				Salvage
+leasExtLbl				Prolongation
+leasSonderLbl			Special-/deposit payment
+leasRestLbl				Salvage value
+leasCycleExtLbl		Prolongation [years]:
+leasExtRentLbl		Prolongated rental
+leasAnnuStr				Leasing annuity
+// ---------- Lieferantenkredit ----------
+headerLK					Trade Credit
+regHeaderLK				Invoice summary
+invoiceLabelLK		Invoice amount
+duedateLabelLK		Due date [days]
+vatLabelLK				VAT (Value Added Tax) [%]
+rebateLabelLK			Rabate [%]
+marketLabelLK			Current account interest [%]
+cashdiscountLblLK	Cash discount [%]
+discountPLblLK		Cash discount period [days]
+mwstFrageLbl			VAT included in invoice amount:
+// ---------- Ergebnispage ----------
+ergTitel					Repayment
+ergHeaderDiv			Credit summary
+ergTableDiv				Repayment plan
+// Section - Individual Updated IDs marked with '#':
+#ergProStr				per
+#ergHeaderAStr		<b>Repayment with constant annuity</b>
+#ergHeaderRStr		<b>Repayment with constant rate</b>
+#ergDarlehenStr		Loan:
+#ergSchuldStr			Dept:
+#ergZSatznStr			Interest rate:
+#ergEffSatznStr		Effective interest rate (IRR/AIBD):
+#ergTSatzStr			Repayment interest:
+#ergTDauerStr			Repayment period:
+#ergAnnuStr				Annuity:
+#ergPeriodStr			payment period
+#ergRateStr				Rate:
+#ergimJahrStr			per year:
+#ergimMonatStr		per month:
+#ergBEvenStr			break-even after:
+#ergnachEndeStr		At the end of
+#ergZinsenStr			Interest:
+#ergTilgungStr		Repayment:
+#ergTProzentStr		R-%:
+#ergZProzentStr		I-%:
+#ergAnnuStr				Annuity:
+#ergJahrStr				year
+#ergQuarterStr		quarter
+#ergHalfYearStr		half-year
+#ergMonthStr			month
+#ergJahreStr			years
+#ergQuartersStr		quarters
+#ergHalfYearsStr	half-years
+#ergMonthsStr			months
+#ergJahrenStr			years
+#ergJAHRENStr			YEARS
+#ergAnfangStr			(repayment interest at start)
+#ergSubtotalStr		SUB-TOTAL AFTER
+#ergTotalStr			TOTAL AFTER
+#ergAnnuAbStr			Annuity starting:
+#ergRateAbStr			Rate starting:
+#ergTFreeStr			Grace period:
+#ergAgioStr				Agio:
+#ergDisagioStr		Disagio:
+#ergAuszahlungStr	Pay-off:
+#ergSonderStr			Special additional repayment:
+#ergAusglStr			Adjustment
+#ergStartStr			Start:
+#ergEndeStr				End:
+#ergDatumStr			Date:
+// ---------- Bewertungpage ----------
+bewTitel					Performance
+bewHeaderDiv			Credit performance
+#mailBewHeader		CREDIT PERFORMANCE
+#bewHeaderAStr		<b>for a debt of annuity</b>
+#bewHeaderRStr		<b>for a debt of rate</b>
+#bewLaufzeitStr		Repayment period:
+#bewMarktStr			Current interest:
+#bewRemainPStr		Remaining period:
+#bewKursStr				Price:
+#bewTakeoverStr		take over
+#bewRenditeStr		Effective return:
+#bewimJahrStr			In year:
+// ---------- DisplayLeasing ----------
+#leasHeader				<b>for a leasing annuity</b>
+#leasAnschaffung	Investment:
+#leasLaufzeitExt	Prolongation:
+#leasExtRent			Prolongated rental value:
+#leasLaufzeitStr	Leasing period:
+#leasSonderStr		Special-/deposit payment:
+#leasRestStr			Salvage value:
+#leasOptStr				Leasing options:
+#leasPeriodStr		Leasing periods
+#leasAnnuHeadStr	Leasing annuity:
+#leasExtRateStr		At prolongation
+#vonZahlung				Payment from:
+#bisZahlung				to:
+// ---------- DisplayLieferantenkredit ----------
+#skontoHeader			<b>for a trade credit</b>
+#BetragStr				Invoice amount:
+#ZielStr					Due date:
+#ZahlungStr				Payment amount:
+#VatStr						VAT:
+#RabattStr				Rabate:
+#MarktzinsStr			Current account interest:
+#SkontoStr				Cash discount:
+#SkontofristStr		Cash discount period:
+#NettoStr					Net value
+#BruttoStr				Gross value
+#FinanzgewinnStr	Financing earnings:
+#skontoTageStr		days
+#ZeitraumLKStr		Timeframe for trade credit:
+#kostenlosStr			free of costs:
+#kostenpflichtStr	with costs:
+#ZinssatzLKStr		Interest rate for trade credit:
+#tradecreditJa		Recommendation: <b>Use trade credit for financing!</b>
+#tradecreditNein	Interest rate for trade credit to high. Recommendation: <b>Use cash discount, if necessary by current account!</b>
+// ---------- Popups ----------
+popSaveFrame			Save
+popSaveHeader			Name:
+saveMsgSuccess		Saved successfully!
+popOptions				Options successfully changed!
+popRestwertError	<b>ATTENTION:</b><br/>The salvage value plus deposit payment of an acquisition cannot be equal to or greater than its acquisition cost!<p><b>Please change:</b><br/>Reduce either the 'deposite payment' and/or the 'salvage value'.</p>
+popAnzahlungError	<b>ATTENTION:</b><br/>The special-/deposit payment plus salvage value of an acquisition cannot be equal to or greater than its acquisition cost!
+popTilgungError		<b>ATTENTION:</b><br/>The 'Grace period' per repayment period (monthly, quarterly, half or full year) must not be equal to or greater than the repayment period!<p>Example: In a quarterly payment so there is 4 payments per year. Thus, for this the 'Grace period' for a whole year would be 4.</p><p><b>Please change:</b><br/>Reduce the timeframe of the 'Grace period'.</p>
+popSonderError		<b>ATTENTION:</b><br/>The Special-/deposit payment cannot be equal to or bigger than the credit anuity in the corresponding payment period!<p><b>Please change:</b><br/>Reduce the amount of the Special-/deposit payment.</p>
+popSonderPAError	<b>ATTENTION:</b><br/>The Special-/deposit payment cannot be equal to or bigger than the credit target!<p><b>Please change:</b><br/>Reduce the amount of the Special-/deposit payment.</p>
+// ---------- Mail ----------
+#mailRegHead1			CREDIT OVERVIEW
+#mailRegHead2			REPAYMENT PLAN
+#mailRegHead3			CREDIT PROGRESS <span style="font-size:0.8em;">[in thousands ('000)]</span>
+#mailBewSubject		viaCredit - Credit performance
+#mailErgSubject		viaCredit - Repayment plan
+#mailFeedbackSub	viaCredit - Feedback
+#mailRecommendSub	You should install this App - viaCredit
+#mailCompliment		<b>What I especially liked about this App is:</b></br>
+#mailImprovement	<b>Further improvements:</b><br/>
+#mailContact			<b>Please establish contact to me:</b></br>- First-, Surname: </br>- Email: </br>- Phone: </br></br>It is important to me: </br>  
+#mailRecommendStr	<b>This App is very interesting!</b></br>I found a great App, maybe I think it is very useful for you.</br>Just click here on the AppStore button. This takes you directly to the store: </br>
+#mailRecommendLnk	<a href="https://itunes.apple.com/us/app/viacredit/id648996614?l=de&ls=1&mt=8"><img src="http://viacredit.vialinked.com/img/Available_on_the_App_Store_Badge_US-UK_135x40.png" width="135" border="0" alt="AppStore"></a>	
+#mailRegards			Best regards
+// ---------- Options ----------
+headerOptions			Options
+currencyHeader		Currency
+currencyText			Which currency symbol do you like to use?
+currencyLabel			Currency:
+languageHeader		Language
+languageText			Which language do you like to use?
+languageLabel			Language:
+numbersHeader			Display of numbers
+numbersText				Which notations of numbers?
+visualHeader			Colors
+visualText				What kind of colors do you want?
+dividerHeader			Repayment plan
+dividerText				Subtotal after how many years?
+langUS						English (en-US)
+langDE						German (de-DE)
+langES						Spanish (es-ES)
+// ---------- Chart ----------
+chartDiv					Credit progress <span style="font-size:0.8em;">[in thousands ('000)]</span>
+// ---------- info ----------
+headerInfo				Info
+iText000000				<h3>Credit agreements overview</h3>
+iText000001				Credit agreements should be in terms of payments by the debtor, completed in a variety of types. viaCredit will give you answers to the following questions:<ul style="list-style-type:square;padding-left:1.4em;margin-top:0.2em;"><li>What is the cash flow for a certain loan amount?</li><li>Offers me an annuity or repayment rates benefits?</li><li>What is the complete repayment plan for loans and mortgages?</li><li>What is the effective interest rate by IRR/AIBD</li><li>Does it make sense to take a trade credit / cash discount claim?</li><li>At what price can I buy a current loan?</li><li>What is a credit return (performance) at a certain price? </li></ul>   
+iText000002				<b>Mode of payment</b><br/>viaCredit assumes that payments and interests will be paid in arrears. The payments made by the debtor to the creditor, called annuities. Annuities may componed by several parts : ≫interests-, repayment amount, agio, premium fees, other fees≪.
+iText000011				<b>Debtor</b><br/>The ≫debtor (buyer/customer)≪ is required to provide the creditor a specific claim (monetary amount). The maturity of the claim is organized by an agreement. 
+iText000021				<b>Creditor</b><br/>A ≫creditor (seller/vendor)≪ may require a debtor a specific claim. He believes the debtor that it can settle this claim.
+iText000031				<b>Interest rate</b><br/>The amount expressed in percent for a debt is defined as an interest rate.  
+iText001000				<h3>Dashboard</h3>
+iText001001				The dashboard lists all stored repayment plans and reviews. A touch on the selection brings you to the appropriate repayment plan. This can change and save again if necessary.<br clear=all> 
+iText001002				<img src="./img/viaCredit-button.png" width="130" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:0px">The button ≫viaCredit≪ always shows the menu from which all modules can be selected from viaCredit.<br clear=all>
+iText002000				<h3>Credits</h3>
+iText002001				<b>Repayments of loans</b><br/>Do you need a loan for a purchase: to finance a ≫car or real estate mortgage≪. The conditions of a loan base on the agreed ≫nominal interest rate≪ and the repayment period. Credit will be payed either on a ≫rate- or annuity repayment≪. There is also the possibility of special agreements, such as ≫grace period, agio or disagio≪ set.
+iText002003				<b>Annuity overview</b><br/>The ≫annuity≪ is dependent on the ≫interest rate≪ and ≫loan term amount≪ of the payment to be made at the end of the payment period. Annuities are defined as an interest rate and a repayment component.
+iText002004				<b>Repayment with a constant rate</b><br/><img src="./img/rate.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:7px"><br/>The repayment of a constant rate or annuity has an impact on the ≫cash flow≪ at the end of the repayment period. If the annuity repayment is always constant, while the repayment rates steadily declining over the term of the loan.   
+iText003001				Characteristics of a ≫repayment by rates≪ are repayments in ≫constantly≪ amount. To the repayment- and the interest rate will be added together and called annuity. With the repayment period the interest rate will be decreasing as well as the annuity.<br clear=all>
+iText002011				<b>Agio</b><br/>Otherwise as standard loans, the agio fund investors is very important, because fund shares are regularly traded with an agio. To buy a fund with a certain amount is worth, because the buyer must pay more so when he finally gets.
+iText002021				<b>Disagio</b><br/>To negotiate a lower nominal interest rate, any disagio is agreed sometimes more. The disagio represents a kind of a ≫prepaid interest≪ and is a basically part of the ≫effective interest rate≪. The advantage of a disagio can be a tax benefit, which can be distributed over the entire loan repayment period. With a grace period over the entire repayment period, the loan would be a linear, and at a rate-, respective an annuity repayment a progressive depreciation makes sense. Although this disagio reduces the loan amount, but must be completely repaid with the whole interest rates of the whole loan amount. Therefore, the disagio has no impact on the payments of the repayment plan. 
+iText002031				<b>Grace period</b><br/>At the ≫grace period≪ (no repayment) the loan amount is not repaid during a part or the whole of the repayment period. At the end of the grace period, then you have the loan amount for the remaining term or if it has been agreed on the overall running time, will be fully repayed. For debitors that loan really makes sense, if this loan agreement covered by life insurance savings contracts etc. 
+iText002041				<b>Effective interest rate</b><br/>viaCredit is using the effective interst rate by method of AIBD (Association of International Bond Dealers), organized by ISMA (International Securities Market Association). Loan offerings with same interest period can be compared using the effective interest rate now.
+iText002002				<b>Processing fees</b><br/>Banks charge their customers for the granting of loans often additional ≫processing fees≪. The agreement on the repayment of the fees can be very different. The fees are included in the calculation of the effective interest rate. viaCredit calculates for the effective interest rate the fees over the entire repayment period. However, the fees must be paid before the loan is provided. 
+iText003021				<b>Annuity</b><br/>The annuity is not constant with repayment by rates and decreases with increasing repayment period.<br clear=all>
+iText004001				The purpose of the repayment by annuity is to spread payments evenly over the years for financing any objects. The annuity will use almost anywhere, but is found mainly in the real estate financing (pls. see also siehe ordinary annuity/annuity-immediate). Conventionally the money for real estates from banks, or insurance, is usually designed as an annuity payment.
+iText004002				<img src="./img/annuitaet.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:10px;margin-bottom:7px"><br/><b>Benefit</b><br/>For a debtor, the annuity is a stable and consistent basis of calculation. To a Bank, it represents a clear and simply structured liability with a/Applications/Web-Build-Server/IOS-Projects/viaCredit/Versions/0.9.2/js/credit.js steady monthly cash flow for example.
+iText004011				<b>Annuity</b><br/>The annuity is a repayment annuity in which the whole runtime constant amount (pls. see figure). Composed of a decreasing interest and an increasing repayment rate. An initially higher interest rate payment will be overhauled in the period up to the break-even point (pls. see figure: from 4 year) of the repayment rate payment.<br clear=all>
+iText005000				<h3>Mortgage</h3>
+iText005001				<b>Repayment with a constant annuity</b><br/>A special form of mortgage loan is the ≫annuity-immediate≪ in which the repayment is calculated as a percentage of the original debt. Characteristic of a annuity-immediate is, that there is no integer maturities. An example of this is a mortgage loan for a real estate financing. 
+iText005002				Since the repayment rates year after year increasing the repayment rates, but can be determined only for the first year, which then increases during the repayment period, with a simultaneous reduction of the interest amount.   
+iText005011				<b>Adjustment payment</b><br/>Since there is no integer maturities, this final payment (≫adjustment payments≪) can be paid either at the beginning or end of the entire repayment period.
+iText006000				<h3>Price of a dept</h3>
+iText006001				An evaluation of future repayment payment is always provided of safe future expectations, or in ability to pay and willingness of the debitor. The ≫price of a debt≪ means the price, someone (has) to pay to acquire rights for future (interest- and repayment-) payments. An investor to acquire rights to a loan agreement has two options basically. Either he goes into the current loan agreement and pays the price, or he puts an amount equal to the present value at the appropriate rate of interest on the capital market. Both alternatives promise the same ≫benefit≪. 
+iText006002				<b>Profit maxim</b><br/>An investor will therefore try to put his money so that as the ≫price of a debt≪ is less than the present value of an alternative investment with the same interest rates. 
+iText007000				<h3>Effective return</h3>
+iText007001				≫Effektive return≪ is called the interest rate at which the present value of the payment entitlements is similar to the ≫price of dept≪. 
+iText007002				<img src="./img/rendite-performance.png" width="280" border="0" align="top" alt="" style="float:left;margin-right:7px"><br/>A repayment timeframe has only one course or price on a particular date. With the assumption of an annual series of payments, increase payments (interests and repayments) by the end of rise (pls. see figure). Thus the effective return increases also in the-year period, until the payment of the annuity at the end of the year. The balance of the credit is then lower by this amount, so the effective return drops abruptly. 
+iText007003				<b>Profit maxim</b><br/>The effective return of a loan should be at least equal to or higher than the nominal interest rate at which the loan was agreed. Therefore, there is only a limited period to which it is worthwhile to take the loan at a fixed price, or to replace. (figure: with a credit target of 1,000 EUR, nominal interst rate: 6%, repayment period: 5 years and price of: 900 EUR, the take over makes economic sense only in the period of 11 months. With only 38 months remaining term of the effective interest rate then falls even below 0 %).<br clear=all> 
+iText008000				<h3>Options</h3>
+iText008001				For the presentations of the values ​​can be the currency symbols (e.g. EUR, US$, etc.), select the language for the app and the numerary notation for presenting/printing numbers could be choosen. 
+iText010000				<h3>Service</h3>
+iText010001				<b>Infos & ideas</b><br/>Give us more ideas and your opinions on the app. We want to improve and further customize the app to your requirements. Please send us a mail.
+iText010002				<b>Recommend the App</b><br/>We would be delighted if you recommend viaCredit to friends, family and business colleagues.
+iText009000				<h3>Trade Credit</h3>
+iText009001				<b>What is a trade credit?</b><br/>If the supplier provides the customer a payment without deductions, this is called a ≫trade credit≪. The customer gets the possibilty to pay the bill within a certain time period with no additional costs (e.g.: Payment of the invoice within 30 days ). If the supplier in addition to this loan also provides a ≫cash discount≪  (e.g.: For payments within 7 days of the invoice date, a 2% cash discount is granted), only the time period between the expiry of discount payment terms and the general term of payment is called a trade credit (e.g.: a payment due date of 30 days minus 7 days cash discount period => 23 days trade credit).
+iText009002				<b>Recommendation</b><br/>The benefits of trade credit and the non-use of the granted cash discount can cause the customer a high interest expense! Therefore, it may be beneficial for the customer if he pays the invoice amount if necessary by taking the advantage of the cash discount granted by his current account.
+iText011000				<h3>Leasing</h3>
+iText011001				<b>The idea behind</b><br/>≫Leasing≪ is a form of financing for the purchase the leased property from the lessor and the lessee (customer) will be left upon payment of an agreed fee for use. With leasing, you pay only for the use of a purchase, not for its acquisition. Leasing is a form of an ≫annuity≪ Repayment.
+iText011002				<b>Pros and cons</b><br/><ul style="list-style-type:square;padding-left:1.4em;margin-top:0.2em;"><li>Monthly payments are depends of salvage value</li><li>Getting a fixed financing annuity instead of a floating rate</li><li>Benefiting from tax advantages only for companies</li><li>Conserving working capital and avoiding cash-devouring down payments and gaining immediate access to the most up-to-date business tools</li></ul>  
+iText011003				<b>Salvage value</b><br/>The salvage value determined for the most part of the leasing financing. The leasing annuity is depends on the high of salvage value. The salvage value of the leased property must be achieved at the end of the lease contract. If this is not the case, the customer must reimburse the financial compensation! 
+iText011004				<b>Prolongated rental</b><br/>The new determined prolongated rental is calculated so that rental cover the consumption value for the leased asset on the basis of the asset value, respectivly the value corresponding to the tax depreciation result. This results in the following period to significantly lower leasing repayments.
+// ---------- impressum ---------
+headerImprint			Imprint
+impText01					<b>viaCredit</b>
+impText02					Version: 0.9.8
+impText03					Copyright © 2014:</br>&nbsp;&nbsp;&nbsp;&nbsp;Friedhelm Koch,</br>&nbsp;&nbsp;&nbsp;&nbsp;Hanfweg 2, 85302 Gerolsbach, Germany</b>
+impText04					<b>Disclaimer</b>
+impText05					There is no guarantee, that calculations of this service at any time be represented completely, correctly and in timeliness of data.  
+impText06					<p>Thanks for the translation into Spanish:</br>&nbsp;&nbsp;&nbsp;&nbsp;Fabian Osterloh</p>
+// ---------- others/Seiten übergreifend ----------
+copyright					Copyright © 2014 by viaCredit
+
+// EOF

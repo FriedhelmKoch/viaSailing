@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<!--
+    2017, Prototyp by Friedhelm Koch
+-->
+<html>
+	<head>
+	
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+		<title>Wegpunktnavigation</title>
+
+		<!-- Favicon Icon -->
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+		
+		<!-- jquery.mobile 1.4.5 custom styles and icons -->
+		<link rel="stylesheet" href="./css/jquery.mobile.icons.min.css" />
+		<link rel="stylesheet" href="./css/jquery.mobile.structure.min.css" />
+		<link rel="stylesheet" href="./css/jquery.mobile.theme.min.css" />
+
+		<!-- leaflet Stylesheets -->
+		<link rel="stylesheet" href="./css/leaflet.min.css" />
+		<link rel="stylesheet" href="./css/navigation.min.css" />
+	
+		<!-- jquery 1.10.2 -->
+		<script type="text/javascript" src="./js/jquery.min.js"></script>
+    
+		<!-- jquery.mobile 1.4.5 -->
+		<script type="text/javascript" src="./js/jquery.mobile.min.js"></script>
+		
+		<!-- localstorage 2.3.0 -->
+		<script type="text/javascript" src="./js/localstoragedb.min.js"></script>
+
+		<!-- leaflet 0.7.7 -->
+		<script type="text/javascript" src="./js/leaflet.min.js"></script>
+    
+		<!-- Navigations-Algorithmen für leaflet 0.8.2 -->
+		<script type="text/javascript" src="./js/navigation.min.js"></script>
+
+		<!-- Individulle Scripts -->
+		<script type="text/javascript" src="./js/geodistances.min.js"></script>
+		<script type="text/javascript" src="./js/prototyp.min.js"></script>
+
+		<!-- Knop Drehknopf 1.2.8 -->
+		<script type="text/javascript" src="./js/jquery.knob.min.js"></script>
+	
+		<script type="text/javascript">
+      
+      // Globale Variablen
+      var watchID, myLat, myLng, accuracy, altitude, altitudeAccuracy, heading, speed, newMarker, c, KP, KW, AlphaW, AlphaZ, AlphaKP, AlphaB, AlphaC, BetaP, BetaL, Gamma, KursWinkel, KursLinienlaenge, ShipPoint_analog, ShipPoint_dezimal, WayPoint_analog, WayPoint_dezimal, WindStaerke, schnellsterWinkel,
+			ship_6_beat_angel, ship_8_beat_angel, ship_10_beat_angel, ship_12_beat_angel, ship_14_beat_angel, ship_16_beat_angel, ship_20_beat_angel;
+
+      var SchiffTyp = '';					// Bsp. Hanse 430
+      var VPP_messwerteDB;		      // Datenbank aller Schiffsdaten inkl. VPP Messwerte
+      var recDB;                  // Hier werden Datenbankrecords gespeichert
+ 
+			// Individuelles Marker-Icon (Schiff) definieren
+			var myShip = L.icon({
+  		  iconUrl: './img/ship-marker-icon.png',
+				iconRetinaUrl: './img/ship-marker-icon-2x.png',
+				iconSize: [25, 45],
+				iconAnchor: [12, 45],
+    		popupAnchor: [0, -35],
+    		shadowUrl: './img/marker-shadow.png',
+    		shadowRetinaUrl: './img/marker-shadow@2x.png',
+    		shadowSize: [48, 45],
+    		shadowAnchor: [12, 45]
+			});
+					
+		$(document).ready(function() {
+		
+			iOSversion();			// Header für iOS7+ anpassen
+			initDB();					// Datenbank initialisieren
+			
+			// Display - Höhen und Breiten für Anzeigebereiche 
+			var mapheight = $(window).height();
+			var mapwidth = $(window).width();
+	    var header = $('.header:visible');
+	    var footer = $('.footer:visible');
+	    var content = $('.content:visible');
+	    var viewport_height = $(window).height();
+	    var content_height = viewport_height - header.outerHeight() - footer.outerHeight();
+
+      // Karte auf Höhe der Contentfläche einstellen
+			$('#map').css("height", content_height);
+
+			// Aktuelle Position ohne Watch darstellen
+			getLocation();
+
+			$('#getLocation').on('click', function(){
+  			$('this').removeClass("ui-btn-active");	
+				getLocation();
+			});
+			
+			$('#watchLocation').on('click', function(){
+  			watchLocation();
+			});
+
+			$('#clearWatch').on('click', function(){
+  			clearWatch();
+			});
+										
+		});
+
+	</script>
+				
+	</head>
+	
+	<body>
+
+		<div data-role="page" id="mapPage">
+		
+			<div data-role="header" data-theme="a" style="overflow:hidden;opacity:0.85;"data-position="fixed" style="overflow:hidden;opacity:0.85;" data-fullscreen="true">
+				<h1>Wegpunktnavigation</h1>
+			</div>
+			
+			<div role="main" class="ui-content" style="padding:0px;">
+  
+				<div id="map" style="height:350px;"></div>
+
+			</div>
+			
+			<div data-role="footer" data-position="fixed" style="overflow:hidden;opacity:0.85;">
+				<div data-role="navbar">
+				
+					<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" style="margin-left:5px;">
+						<a href="#popupShowNavigation" data-rel="popup" class="ui-btn ui-corner-all ui-icon-eye ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Auge</a>
+            <a href="#" alt="Position" id="getLocation" class="ui-btn ui-corner-all ui-icon-navigation ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Wind</a>
+            <a href="#windPage" class="ui-btn ui-corner-all ui-icon-cloud ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Wind</a>
+            <a href="#optionsPage" class="ui-btn ui-corner-all ui-icon-gear ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Options</a>
+						<a href="#resultPage" class="ui-btn ui-corner-all ui-icon-grid ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Egebnissse</a>
+						<a href="#impressumPage" class="ui-btn ui-corner-all ui-icon-info ui-btn-icon-notext ui-nodisc-icon ui-btn-inline ui-alt-icon">Options</a>
+					</fieldset>
+
+    		</div><!-- /navbar -->
+			</div>
+		
+      <!-- Popup der elementaren Navigations Parameter -->
+      <div data-role="popup" id="popupShowNavigation" data-transition="slidedown" data-dismissible="true" data-position-to="window" data-theme="a" data-overlay-theme="a" class="ui-content">
+        <a href="#" id="successCloseBtn" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<p>
+				<div style="font-size:13px;white-space:normal;" id="Navi_Schiffsposition"></div>
+				<div style="font-size:13px;white-space:normal;" id="Navi_Winddaten"></div>
+				<div style="font-size:13px;white-space:normal;" id="Navi_Geschwindigkeit"></div>
+				</p>
+				<p><div style="font-size:13px;white-space:normal;" id="Navi_Wegpunkt"></div></p>
+      </div><!-- /popup -->
+
+
+		</div><!-- /mapPage -->
+		
+    
+    
+    <script type="text/javascript">
+      
+    </script>
+    
+		
+		<div data-role="page" id="windPage">
+		
+			<div data-role="header" data-theme="a">
+				<a href="#" data-direction="reverse" data-transition="slide" data-rel="back" class="iOS7Header ui-btn ui-corner-all ui-btn-icon-left ui-icon-carat-l ui-nodisc-icon ui-btn-inline ui-alt-icon"><span id="changeWindpage" class="backBtn">Zurück</span></a>
+				<h1>Wind Optionen</h1>
+			</div>
+			
+			<div role="main" class="ui-content">
+			
+				<div style="text-align:center; width:100%; float:left;">
+					<p>
+					<label for="windRichtung">Wind aus Richtung [°]</label>
+					<input class="windDir" id="windRichtung" name="windRichtung" data-role="none" data-min="0" data-max="360" data-step="1" data-font="Helvetica, Arial" data-fontWeight="200" data-width="200" data-cursor="true" data-displayInput="true" data-fgColor="#3388cc" data-inputColor="black" data-bgColor="#e0e0e0" data-thickness="0.2" value="0" />
+					</p>
+
+					<hr size="1px" align="center" width="90%" color="#c0c0c0" noshade>
+
+					<p>
+					<label for="windSpeed">Windgeschwindigkeit [kn]</label>
+    			<input name="windSpeed" id="windSpeed" data-highlight="true" min="6" max="20" value="8" step="2" type="range">
+					</p>
+						
+					<hr size="1px" align="center" width="90%" color="#c0c0c0" noshade>
+					
+					<p>
+					<label for="distLayline">Oszillierender Wind [%]</label>
+					<input name="distLayline" id="distLayline" data-highlight="true" min="1" max="15" value="8" step="1" type="range">
+					</p>
+
+					<hr size="1px" align="center" width="90%" color="#c0c0c0" noshade>
+
+					<p>
+					<label for="Genauigkeit">Postionsdaten GPS Genauigkeit anzeigen:</label>
+					<select name="Genauigkeit" id="Genauigkeit" data-role="slider">
+						<option value="off" selceted="selected">Off</option>
+						<option value="on">On</option>
+					</select>
+					</p>
+
+<!--
+					<hr size="1px" align="center" width="90%" color="#c0c0c0" noshade>
+ 
+					<p>
+					<label for="Positionsdaten">Postionsdaten in Form Grad,dezimal (54,2345°N):</label>
+					<select name="Positionsdaten" id="Positionsdaten" data-role="slider">
+						<option value="off" selceted="selected">Off</option>
+						<option value="on">On</option>
+					</select>
+					</p>
+-->
+					
+				</div>
+					
+			</div>
+			
+			<div data-role="footer" data-position="fixed" style="overflow:hidden;opacity:0.85;">
+			</div>
+			
+		</div><!-- /windPage -->
+		
+		
+		<div data-role="page" id="resultPage">
+			
+			<div data-role="header" data-theme="a">
+				<a href="#" data-direction="reverse" data-transition="slide" data-rel="back" class="iOS7Header ui-btn ui-corner-all ui-btn-icon-left ui-icon-carat-l ui-nodisc-icon ui-btn-inline ui-alt-icon"><span id="backBtn" class="backBtn">Zurück</span></a>
+				<h1>Ergebnis VPP-Interpolation</h1>
+			</div>
+			
+			<div role="main" class="ui-content">
+				
+				<p><div id="perform-output" style="font-size:12px;white-space:normal;"></div></p>
+				
+				<hr size="1px" align="center" width="100%" color="#c0c0c0" noshade>
+				
+				<p><div id="equation-output" style="font-size:10px;white-space:normal;"></div></p>
+
+				<hr size="1px" align="center" width="100%" color="#c0c0c0" noshade>
+
+				<p><div id="table-output" style="font-size:10px;white-space:normal;"></div></p>
+				
+			</div>
+			
+			<div data-role="footer" data-position="fixed" style="overflow:hidden;opacity:0.85;">
+			</div>
+			
+		</div><!-- /windPage -->
+		
+		
+		<div data-role="page" id="optionsPage">
+		
+			<div data-role="header" data-theme="a">
+				<a href="#" data-direction="reverse" data-transition="slide" data-rel="back" class="iOS7Header ui-btn ui-corner-all ui-btn-icon-left ui-icon-carat-l ui-nodisc-icon ui-btn-inline ui-alt-icon"><span id="backBtn" class="backBtn">Zurück</span></a>
+				<h1>Schiffsdaten</h1>
+				<a href="#" class="iOS7Header ui-btn ui-corner-all ui-nodisc-icon ui-icon-refresh ui-btn-icon-left ui-btn-inline ui-alt-icon updateShip" data-transition="slide">Daten speichern</a>
+			</div>
+
+			<div role="main" class="ui-content">
+				
+				<h4>Schiffsdaten:</h4>
+				Geben Sie hier einige Schiffsdaten ein. Die Daten können direkt aus einem IMS- oder ORC-Meßbrief entnommen werden. 
+
+				<fieldset class="ui-grid-a">
+					<!-- Schiffsname -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipTyp">Schiffsname:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipName" id="shipName" type="text" placeholder="Name des Schiffes"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[text]</div>
+					<!-- Schiffstyp -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipTyp">Schiffstyp:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipTyp" id="shipTyp" type="text" placeholder="Bsp: Benneteau 42"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[text]</div>
+					<!-- Segelnummer -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipTyp">Segelnummer:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipNum" id="shipNum" type="text" placeholder="Nummer des Segels z.B. GER 1234"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[text]</div>
+					<!-- Länge über alles -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipLOA">LOA:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipLOA" id="shipLOA" type="number" pattern="[0-9.]*" step="0.001" placeholder="Länge über alles"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m]</div>
+					<!-- Länge Wasserlinie -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipLWL">LWL:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipLWL" id="shipLWL" type="number" pattern="[0-9.]*" step="0.001" placeholder="Wasserlinienlänge"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m]</div>
+					<!-- Breite über alles -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipBOA">BOA:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipBOA" id="shipBOA" type="number" pattern="[0-9.]*" step="0.001" placeholder="Breite über alles"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m]</div>
+					<!-- Breite Wasserlinie -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipBWL">BWL:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipBWL" id="shipBWL" type="number" pattern="[0-9.]*" step="0.001" placeholder="Breite Wasserlinie"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m]</div>
+					<!-- Tiefgang -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipT">Tiefgang-T:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipT" id="shipT" type="number" pattern="[0-9.]*" step="0.001" placeholder="Tiefgang"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m]</div>
+					<!-- Deplacement - Gewicht der segelfertigen Yacht -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipD">Deplacement-D:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipD" id="shipD" type="number" pattern="[0-9.]*" step="0.001" placeholder="Gesamtgewicht"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[kg]</div>
+					<!-- Ballast -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipB">Balast-B:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipB" id="shipB" type="number" pattern="[0-9.]*" step="0.001" placeholder="Ballast"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[kg]</div>
+					<!-- Verdrängung -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipV">Verdrängung-V:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipV" id="shipV" type="number" pattern="[0-9.]*" step="0.001" placeholder="Wasserverdrängung"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[kg]</div>
+					<!-- Segelfläche -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shipAS">Segelfläche-AS:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipAS" id="shipAS" type="number" pattern="[0-9.]*" step="0.001" placeholder="Gesamtsegelfläche"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m<sup>2</sup>]</div>
+					<!-- GPH -->
+					<div class="ui-block-a" style="width:30%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="shGPH">GPH-Wert:</label></div>
+					<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="shipGPH" id="shipGPH" type="number" pattern="[0-9.]*" step="0.001" placeholder="General Purpose Handicap"></div>
+					<div class="ui-block-c" style="width:20%;padding-left:7px;margin-top:15px;">[m<sup>2</sup>]</div>
+				</fieldset>
+											
+				<h4>Performance Parameter:</h4>
+				Tragen Sie für die entsprechenden Windgeschwindigkeiten und Windeinfallrichtung die Performancedaten des Schiffes ein. 
+
+				<div data-role="collapsibleset" data-theme="a" data-content-theme="a" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+
+    			<div data-role="collapsible">
+        		<h5>6 kn</h5>						
+						<fieldset class="ui-grid-a">
+							<div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_beat">BeatVMG:</label></div>
+							<div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_6_beat_angel" id="ship_6_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_6_beat" id="ship_6_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_52" id="ship_6_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_60" id="ship_6_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_75" id="ship_6_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_90" id="ship_6_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_110" id="ship_6_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_120" id="ship_6_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_135" id="ship_6_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_6_150" id="ship_6_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_6_run_angel" id="ship_6_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_6_run" id="ship_6_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+            </fieldset>
+    			</div>
+					
+    			<div data-role="collapsible">
+        		<h5>8 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_8_beat_angel" id="ship_8_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_8_beat" id="ship_8_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_6_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_52" id="ship_8_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_60" id="ship_8_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_75" id="ship_8_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_90" id="ship_8_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_110" id="ship_8_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_120" id="ship_8_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_135" id="ship_8_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_8_150" id="ship_8_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_8_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_8_run_angel" id="ship_8_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_8_run" id="ship_8_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+					</div>
+					
+    			<div data-role="collapsible">
+        		<h5>10 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_10_beat_angel" id="ship_10_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_10_beat" id="ship_10_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_52" id="ship_10_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_60" id="ship_10_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_75" id="ship_10_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_90" id="ship_10_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_110" id="ship_10_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_120" id="ship_10_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_135" id="ship_10_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_10_150" id="ship_10_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_10_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_10_run_angel" id="ship_10_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_10_run" id="ship_10_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+    			</div>
+					
+					<div data-role="collapsible">
+        		<h5>12 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_12_beat_angel" id="ship_12_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_12_beat" id="ship_12_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_52" id="ship_12_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_60" id="ship_12_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_75" id="ship_12_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_90" id="ship_12_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_110" id="ship_12_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_120" id="ship_12_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_135" id="ship_12_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_12_150" id="ship_12_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_12_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_12_run_angel" id="ship_12_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_12_run" id="ship_12_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+    			</div>
+					
+    			<div data-role="collapsible">
+        		<h5>14 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_14_beat" id="ship_14_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_14_beat" id="ship_14_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_52" id="ship_14_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_60" id="ship_14_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_75" id="ship_14_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_90" id="ship_14_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_110" id="ship_14_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_120" id="ship_14_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_135" id="ship_14_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_14_150" id="ship_14_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_14_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_14_run_angel" id="ship_14_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_14_run" id="ship_14_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+    			</div>
+					
+					<div data-role="collapsible">
+        		<h5>16 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_16_beat" id="ship_16_beat_angel" type="number" pattern="[0-9.]*" step="0.01"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_16_beat" id="ship_16_beat" type="number" pattern="[0-9.]*" step="0.01"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_52" id="ship_16_52" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_60" id="ship_16_60" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_75" id="ship_16_75" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_90" id="ship_16_90" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_110" id="ship_16_110" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_120" id="ship_16_120" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_135" id="ship_16_135" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_16_150" id="ship_16_150" type="number" pattern="[0-9.]*" step="0.01"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_16_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_16_run_angel" id="ship_16_run_angel" type="number" pattern="[0-9.]*" step="0.01"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_16_run" id="ship_16_run" type="number" pattern="[0-9.]*" step="0.01"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+    			</div>
+
+					<div data-role="collapsible">
+						<h5>18 kn</h5>
+						<fieldset class="ui-grid-a">
+							<div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_beat">BeatVMG:</label></div>
+							<div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_16_beat" id="ship_18_beat_angel" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_16_beat" id="ship_18_beat" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+		
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_52" id="ship_18_52" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_60" id="ship_18_60" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_75" id="ship_18_75" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_90" id="ship_18_90" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_110" id="ship_18_110" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_120" id="ship_18_120" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_135" id="ship_18_135" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_18_150" id="ship_18_150" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+		
+							<div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_18_run">RunVMG:</label></div>
+							<div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_18_run_angel" id="ship_18_run_angel" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_18_run" id="ship_18_run" type="number" pattern="[0-9.]*" step="0.01" disabled="disabled"></div>
+							<div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+					</div>
+
+
+    			<div data-role="collapsible">
+        		<h5>20 kn</h5>
+						<fieldset class="ui-grid-a">
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_beat">BeatVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_20_beat" id="ship_20_beat_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_20_beat" id="ship_20_beat" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_52">52° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_52" id="ship_20_52" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_60">60° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_60" id="ship_20_60" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_75">75° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_75" id="ship_20_75" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_90">90° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_90" id="ship_20_90" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_110">110° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_110" id="ship_20_110" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_120">120° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_120" id="ship_20_120" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_135">135° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_135" id="ship_20_135" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+							<div class="ui-block-a" style="width:31%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_150">150° :</label></div>
+							<div class="ui-block-b" style="width:40%"><input data-clear-btn="true" data-mini="true" name="ship_20_150" id="ship_20_150" type="number" pattern="[0-9.]*" step="0.001"></div>
+							<div class="ui-block-c" style="width:19%;padding-left:7px;margin-top:15px;">[ktn]</div>
+              
+              <div class="ui-block-a" style="width:25%;text-align:right;"><label style="margin-top:15px;padding-right:5px;" for="ship_20_run">RunVMG:</label></div>
+              <div class="ui-block-b" style="width:25%"><input data-clear-btn="true" data-mini="true" name="ship_20_run_angel" id="ship_20_run_angel" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-b" style="width:35%"><input data-clear-btn="true" data-mini="true" name="ship_20_run" id="ship_20_run" type="number" pattern="[0-9.]*" step="0.001"></div>
+              <div class="ui-block-c" style="width:5%;padding-left:7px;margin-top:15px;">[ktn]</div>
+						</fieldset>
+    			</div>
+					
+					<br/><br/><!-- /Abstand zur Fußzeile -->
+					
+				</div><!-- /collapsibleset -->
+				
+				<!-- popup interpolation -->
+				<div data-role="popup" id="interpolation" data-history="false" data-transition="slidedown" data-dismissible="false" data-position-to="window" data-theme="a" data-overlay-theme="a" class="ui-content">
+					<div data-role="header" data-theme="a">
+						<h3>VPP Spline-Interpolation</h3>
+					</div>
+					<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					<p><div id="_perform-output" style="font-size:10px;white-space:normal;"></div></p>
+				</div><!-- /popup -->
+	
+				<!-- popup successfully saved -->
+				<div data-role="popup" id="popupSaveVPP" data-history="false" data-transition="slidedown" data-dismissible="false" data-position-to="window" data-theme="a" data-overlay-theme="a" class="ui-content">
+					<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					<p style="font-size:15px;white-space:normal;"><center>Daten erfolgreich geändert<br>und für alle Windgeschwindigkeiten neu interpoliert!</center></p>
+				</div><!-- /popup -->
+
+			</div><!-- /main content -->
+
+			<div data-role="footer" data-position="fixed" style="overflow:hidden;opacity:0.85;">
+			</div>
+			
+		</div><!-- /optionsPage -->
+		
+		
+		<div data-role="page" id="impressumPage">
+			
+			<div data-role="header" data-theme="a">
+				<a href="#" data-direction="reverse" data-transition="slide" data-rel="back" class="iOS7Header ui-btn ui-corner-all ui-btn-icon-left ui-icon-carat-l ui-nodisc-icon ui-btn-inline ui-alt-icon"><span id="backBtn" class="backBtn">Zurück</span></a>
+				<h1>Impressum</h1>
+			</div>
+			
+			<div role="main" class="ui-content">
+				
+				<p>
+				<div class="ui-corner-all custom-corners">
+					
+					<div class="ui-bar ui-bar-a">
+						<h3>Impressum</h3>
+					</div>
+					
+					<div class="ui-body ui-body-a">
+						
+						<b>Wegpunktnavigation</b>
+						<p>Version: Prototyp für Masterarbeit</p>
+						<p>Copyright © 2017:</br>&nbsp;&nbsp;&nbsp;&nbsp;Friedhelm Koch,</br>&nbsp;&nbsp;&nbsp;&nbsp;Hanfweg 2, D-85302 Gerolsbach</b></p>
+						<p><b>Haftungsausschluss</b></p>
+						<p>Es kann keine Garantie dafür übernommen werden, dass Berechnungen dieses Services zu jeder Zeit vollständig, richtig und in letzter Aktualität dargestellt werden.</p>
+					</div>
+					
+				</div>
+				</p>
+				
+			</div>
+			
+			<div data-role="footer" data-position="fixed" style="overflow:hidden;opacity:0.85;">
+			</div>
+			
+		</div><!-- /impressumPage -->
+		
+		
+		</div>
+	
+	</body>
+</html>
